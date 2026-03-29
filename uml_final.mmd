@@ -1,0 +1,49 @@
+%% Mermaid class diagram for PawPal+ (final)
+classDiagram
+    class Owner {
+      +str name
+      +int available_minutes
+      +pets: List[Pet]
+      +add_pet(p:Pet)
+      +remove_pet(p:Pet)
+      +get_all_tasks(include_completed:bool)
+    }
+
+    class Pet {
+      +str name
+      +str species
+      +preferences: dict
+      +tasks: List[Task]
+      +add_task(t:Task)
+      +remove_task(t:Task)
+      +get_tasks(include_completed:bool)
+    }
+
+    class Task {
+      +str title
+      +str description
+      +int duration_minutes
+      +str priority
+      +str frequency
+      +bool completed
+      +due_date: date
+      +due_time: str
+      +priority_value(): int
+      +mark_complete(): Optional[Task]
+      +to_dict(): dict
+    }
+
+    class Scheduler {
+      +owner: Owner
+      +generate_schedule(tasks:List[Task], available_minutes:int): List[dict]
+      +filter_tasks(pet_name:Optional[str], include_completed:bool): List[Task]
+      +sort_tasks_by_due_time(tasks:List[Task]): List[Task]
+      +sort_schedule_by_time(schedule:List[dict]): List[dict]
+      +detect_conflicts(schedule:List[dict]): List[str]
+      +pretty_print(schedule:List[dict])
+    }
+
+    Owner "1" -- "*" Pet : owns
+    Pet "1" -- "*" Task : has
+    Scheduler ..> Task : schedules
+    Scheduler ..> Owner : queries
